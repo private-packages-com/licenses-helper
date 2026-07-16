@@ -1,0 +1,28 @@
+{
+  "name": "private-packages-com/licenses-helper",
+  "description": "Discover package licenses and settings",
+  "autoload": {
+    "psr-4": {
+      "PrivatePackages\\DiscoverLicensesCommand\\": "app/"
+    },
+    "files": [
+      "cli-command.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Tom Broucke",
+      "email": "tom@tombroucke.be"
+    }
+  ],
+  "require": {
+    "php": "^8.0"
+  },
+  "require-dev": {
+    "laravel/pint": "^1.29",
+    "phpstan/phpstan": "^2.2",
+    "php-stubs/wordpress-stubs": "^6.9",
+    "php-stubs/wp-cli-stubs": "^2.12",
+    "szepeviktor/phpstan-wordpress": "^2.0"
+  }
+}
