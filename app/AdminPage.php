@@ -78,7 +78,7 @@ class AdminPage
                                     <?php } elseif ($result['supported']) { ?>
                                         <span style="color:#dba617">&#9888; Supported in Private Packages, but can&#8217;t be exported</span>
                                     <?php } else { ?>
-                                        <span style="color:#999">&#8212; Not supported. Contact us if you want this package added.</span>
+                                        <span style="color:#999">&#8212; No preset available. You can try to manually add this plugin in Private Packages. Contact us if you need help.</span>
                                     <?php } ?>
                                 </td>
                             </tr>

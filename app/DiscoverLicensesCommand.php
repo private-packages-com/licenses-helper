@@ -62,7 +62,7 @@ class DiscoverLicensesCommand
             if (! $result['supported']) {
                 $tableRows[] = [
                     'plugin' => $result['slug'],
-                    'import_settings' => \WP_CLI::colorize('%rNot supported. Contact us if you want this package added.%n'),
+                    'import_settings' => \WP_CLI::colorize('%rNo preset available. You can try to manually add this plugin in Private Packages. Contact us if you need help.%n'),
                 ];
 
                 continue;
