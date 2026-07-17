@@ -11,7 +11,7 @@ namespace PrivatePackages\DiscoverLicensesCommand;
  * License: MIT
  * License URI: https://opensource.org/licenses/MIT
  * Text Domain: discover-licenses-command
- * Requires PHP: 8.0
+ * Requires PHP: 8.1
  */
 if (file_exists(__DIR__.'/vendor/autoload.php')) {
     require_once __DIR__.'/vendor/autoload.php';

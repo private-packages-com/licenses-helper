@@ -4,6 +4,11 @@
 
 Discover license credentials for installed premium plugins and export them for import into [Private Packages](https://private-packages.com).
 
+## Requirements
+
+- PHP 8.1 or higher
+- WordPress with WP-CLI
+
 ## Installation & Usage
 
 ### Option 1 — WP-CLI package
