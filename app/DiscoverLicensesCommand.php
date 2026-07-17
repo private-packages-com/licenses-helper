@@ -62,7 +62,7 @@ class DiscoverLicensesCommand
             if (! $result['supported']) {
                 $tableRows[] = [
                     'plugin' => $result['slug'],
-                    'import_settings' => \WP_CLI::colorize('%8No preset found%n'),
+                    'import_settings' => \WP_CLI::colorize('%8Not supported. Contact us if you want this package added.%n'),
                 ];
 
                 continue;
@@ -71,7 +71,7 @@ class DiscoverLicensesCommand
             if (! $result['has_credentials']) {
                 $tableRows[] = [
                     'plugin' => $result['name'],
-                    'import_settings' => \WP_CLI::colorize('%yNo credentials found%n'),
+                    'import_settings' => \WP_CLI::colorize('%ySupported in Private Packages, but can&#8217;t be exported%n'),
                 ];
 
                 continue;
