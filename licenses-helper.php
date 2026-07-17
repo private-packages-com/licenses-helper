@@ -21,10 +21,15 @@ if (defined('WP_CLI')) {
     require_once __DIR__.'/cli-command.php';
 }
 
-add_action('admin_menu', function () {
+add_action('plugins_loaded', function () {
+    if (! is_admin()) {
+        return;
+    }
+
     if (! current_user_can('manage_options')) {
         return;
     }
 
-    (new AdminPage(new LicenseDiscoverer))->addMenuPage();
+    (new AdminPage(new LicenseDiscoverer))
+        ->init();
 });

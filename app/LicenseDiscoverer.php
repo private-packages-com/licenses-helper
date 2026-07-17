@@ -2,25 +2,58 @@
 
 namespace PrivatePackages\DiscoverLicensesCommand;
 
+use PrivatePackages\DiscoverLicensesCommand\Enums\PackageStatus;
+
 class LicenseDiscoverer
 {
-    /** @var array<string, mixed> */
-    private array $packages;
+    private const TRANSIENT_KEY = 'private_packages_packages_json';
+
+    /** @var array<string, mixed>|null */
+    private ?array $packages = null;
 
     /** @var array<string, string> */
     private array $aliases = [];
 
-    public function __construct()
+    private function fetchPackagesJson(): string
     {
-        $packagesFile = dirname(__DIR__).'/storage/packages.json';
-        $contents = file_get_contents($packagesFile);
-        $this->packages = json_decode($contents !== false ? $contents : '[]', true);
+        $cached = get_transient(self::TRANSIENT_KEY);
+
+        if ($cached !== false) {
+            return $cached;
+        }
+
+        $response = wp_remote_get('https://private-packages.com/files/packages.json');
+        $contents = wp_remote_retrieve_body($response);
+        $decoded = json_decode($contents, true);
+
+        if (is_array($decoded) && count($decoded) > 0) {
+            set_transient(self::TRANSIENT_KEY, $contents, 12 * HOUR_IN_SECONDS);
+        }
+
+        return $contents;
+    }
+
+    public function hasValidPackages(): bool
+    {
+        return count($this->getPackages()) > 0;
+    }
+
+    /** @return array<string, mixed> */
+    private function getPackages(): array
+    {
+        if ($this->packages !== null) {
+            return $this->packages;
+        }
+
+        $this->packages = json_decode($this->fetchPackagesJson(), true) ?? [];
 
         foreach ($this->packages as $key => $package) {
             foreach ($package['aliases'] ?? [] as $alias) {
                 $this->aliases[$alias] = $key;
             }
         }
+
+        return $this->packages;
     }
 
     /** @return array<int, string> */
@@ -46,22 +79,24 @@ class LicenseDiscoverer
     {
         $results = [];
 
+        $packages = $this->getPackages();
+
         foreach ($slugs as $slug) {
             $resolvedSlug = $this->aliases[$slug] ?? $slug;
 
-            if (! isset($this->packages[$resolvedSlug])) {
+            if (! isset($packages[$resolvedSlug])) {
                 $results[] = [
                     'slug' => $slug,
                     'name' => $slug,
-                    'supported' => false,
-                    'has_credentials' => false,
+                    'status' => PackageStatus::NoPreset,
                     'export' => null,
                 ];
 
                 continue;
             }
 
-            $package = $this->packages[$resolvedSlug];
+            $package = $packages[$resolvedSlug];
+            $exportable = ($package['exportable'] ?? false) === true;
             $recipe = $this->resolveRecipe($package);
             $secrets = $recipe?->getCredentials();
 
@@ -69,8 +104,7 @@ class LicenseDiscoverer
                 $results[] = [
                     'slug' => $slug,
                     'name' => $package['name'],
-                    'supported' => true,
-                    'has_credentials' => false,
+                    'status' => $exportable ? PackageStatus::LicenseNotFound : PackageStatus::NotExportable,
                     'export' => null,
                 ];
 
@@ -85,8 +119,7 @@ class LicenseDiscoverer
             $results[] = [
                 'slug' => $slug,
                 'name' => $package['name'],
-                'supported' => true,
-                'has_credentials' => true,
+                'status' => $exportable ? PackageStatus::Ready : PackageStatus::LicenseFoundNotExportable,
                 'export' => [
                     'recipe' => $package['recipe'],
                     'type' => $package['type'],

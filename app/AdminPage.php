@@ -2,9 +2,17 @@
 
 namespace PrivatePackages\DiscoverLicensesCommand;
 
+use PrivatePackages\DiscoverLicensesCommand\Enums\PackageStatus;
+
 class AdminPage
 {
     public function __construct(private readonly LicenseDiscoverer $discoverer) {}
+
+    public function init(): void
+    {
+        add_action('admin_menu', [$this, 'addMenuPage']);
+        add_action('admin_notices', [$this, 'notices']);
+    }
 
     public function addMenuPage(): void
     {
@@ -17,8 +25,20 @@ class AdminPage
         );
     }
 
+    public function notices(): void
+    {
+        if ($this->discoverer->hasValidPackages()) {
+            return;
+        }
+        echo '<div class="notice notice-error"><p>'.esc_html__('Licenses Helper: could not load the packages list from private-packages.com. Please try again later.', 'discover-licenses-command').'</p></div>';
+    }
+
     public function renderPage(): void
     {
+        if (! $this->discoverer->hasValidPackages()) {
+            return;
+        }
+
         $installedSlugs = $this->discoverer->getInstalledPluginSlugs();
         $allResults = $this->discoverer->discover($installedSlugs);
 
@@ -73,12 +93,12 @@ class AdminPage
                                 </th>
                                 <td><?php echo esc_html($result['name']); ?></td>
                                 <td>
-                                    <?php if ($result['has_credentials']) { ?>
-                                        <span style="color:#00a32a">&#10003; License found</span>
-                                    <?php } elseif ($result['supported']) { ?>
-                                        <span style="color:#dba617">&#9888; Supported in Private Packages, but can&#8217;t be exported</span>
+                                    <?php if ($result['status'] === PackageStatus::Ready) { ?>
+                                        <span style="color:#00a32a">&#10003; <?php echo esc_html($result['status']->label()); ?></span>
+                                    <?php } elseif (in_array($result['status'], [PackageStatus::LicenseFoundNotExportable, PackageStatus::LicenseNotFound], true)) { ?>
+                                        <span style="color:#dba617">&#9888; <?php echo esc_html($result['status']->label()); ?></span>
                                     <?php } else { ?>
-                                        <span style="color:#999">&#8212; No preset available. You can try to manually add this plugin in Private Packages. Contact us if you need help.</span>
+                                        <span style="color:#999">&#8212; <?php echo esc_html($result['status']->label()); ?></span>
                                     <?php } ?>
                                 </td>
                             </tr>

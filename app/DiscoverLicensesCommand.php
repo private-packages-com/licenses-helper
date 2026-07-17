@@ -2,6 +2,8 @@
 
 namespace PrivatePackages\DiscoverLicensesCommand;
 
+use PrivatePackages\DiscoverLicensesCommand\Enums\PackageStatus;
+
 class DiscoverLicensesCommand
 {
     private LicenseDiscoverer $discoverer;
@@ -44,6 +46,10 @@ class DiscoverLicensesCommand
         $pluginFilter = $assocArgs['plugin'] ?? null;
         $slugFilter = $assocArgs['filter'] ?? null;
 
+        if (! $this->discoverer->hasValidPackages()) {
+            \WP_CLI::error('Could not load the packages list from private-packages.com. Please try again later.');
+        }
+
         $installedPlugins = $pluginFilter
             ? [$pluginFilter]
             : $this->discoverer->getInstalledPluginSlugs();
@@ -59,28 +65,25 @@ class DiscoverLicensesCommand
         $jsonRows = [];
 
         foreach ($results as $result) {
-            if (! $result['supported']) {
-                $tableRows[] = [
-                    'plugin' => $result['slug'],
-                    'import_settings' => \WP_CLI::colorize('%rNo preset available. You can try to manually add this plugin in Private Packages. Contact us if you need help.%n'),
-                ];
+            $status = $result['status'];
 
-                continue;
-            }
-
-            if (! $result['has_credentials']) {
+            if ($status === PackageStatus::Ready) {
+                $jsonRows[] = $result['export'];
                 $tableRows[] = [
                     'plugin' => $result['name'],
-                    'import_settings' => \WP_CLI::colorize('%ySupported in Private Packages, but can\'t be exported%n'),
+                    'import_settings' => \WP_CLI::colorize('%G'.json_encode($result['export']).'%n'),
                 ];
 
                 continue;
             }
 
-            $jsonRows[] = $result['export'];
+            $color = match ($status) {
+                PackageStatus::LicenseFoundNotExportable => '%y',
+                default => '',
+            };
             $tableRows[] = [
                 'plugin' => $result['name'],
-                'import_settings' => \WP_CLI::colorize('%G'.json_encode($result['export']).'%n'),
+                'import_settings' => $color ? \WP_CLI::colorize($color.$status->label().'%n') : $status->label(),
             ];
         }
 
