@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     tags:
-      - '*'
+      - "*"
   workflow_dispatch:
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
 
       - name: Create zip
         run: |
-          zip -rq licenses-helper.zip . \
+          zip -rq private-packages-licenses-helper.zip . \
             --exclude='.git/*' \
             --exclude='.github/*' \
             --exclude='.gitignore' \
@@ -31,10 +31,11 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: licenses-helper
-          path: licenses-helper.zip
+          name: private-packages-licenses-helper
+          path: private-packages-licenses-helper.zip
 
       - name: Create release
+        if: github.event_name != 'workflow_dispatch'
         uses: softprops/action-gh-release@v2
         with:
-          files: licenses-helper.zip
+          files: private-packages-licenses-helper.zip

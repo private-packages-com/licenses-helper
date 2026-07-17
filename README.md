@@ -24,7 +24,7 @@ wp private-packages discover-licenses
 
 **Install via zip:**
 
-1. Download the plugin zip from the [latest release](https://github.com/private-packages-com/licenses-helper/releases/latest/download/licenses-helper.zip).
+1. Download the plugin zip from the [latest release](https://github.com/private-packages-com/licenses-helper/releases/latest/download/private-packages-licenses-helper.zip).
 2. Go to **Plugins > Add New > Upload Plugin** and upload the zip.
 3. Activate the plugin.
 
@@ -73,7 +73,7 @@ The JSON output can be piped or copied directly for import into Private Packages
 
 ## Understanding the Results
 
-| Status | Meaning |
-| ------ | ------- |
+| Status                                                        | Meaning                                                                                                                                                                                                                                                                                                                        |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Not supported. Contact us if you want this package added.** | The plugin is not in the Private Packages list. This either means it is not a premium plugin (in which case it should be installed via [wp-packages.org](https://wp-packages.org)) or it is a premium plugin that Private Packages does not yet support. [Contact us](https://private-packages.com) to request support for it. |
-| **Supported in Private Packages, but can't be exported** | The plugin is in the Private Packages list, but no credentials were found. This could mean the license credentials are not stored in the database, or this helper does not yet know where to look for them. Add this plugin to Private Packages manually. |
+| **Supported in Private Packages, but can't be exported**      | The plugin is in the Private Packages list, but no credentials were found. This could mean the license credentials are not stored in the database, or this helper does not yet know where to look for them. Add this plugin to Private Packages manually.                                                                      |
