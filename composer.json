@@ -1,6 +1,7 @@
 {
   "name": "private-packages-com/licenses-helper",
   "description": "Discover package licenses and settings",
+  "type": "wordpress-plugin",
   "autoload": {
     "psr-4": {
       "PrivatePackages\\DiscoverLicensesCommand\\": "app/"

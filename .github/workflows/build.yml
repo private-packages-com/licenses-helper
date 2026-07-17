@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: composer install --no-dev --optimize-autoloader --quiet
+
+      - name: Create zip
+        run: |
+          zip -rq licenses-helper.zip . \
+            --exclude='.git/*' \
+            --exclude='.github/*' \
+            --exclude='.gitignore' \
+            --exclude='.claude' \
+            --exclude='phpstan.neon' \
+            --exclude='composer.json' \
+            --exclude='composer.lock' \
+            --exclude='storage/*'
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: licenses-helper
+          path: licenses-helper.zip
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: licenses-helper.zip

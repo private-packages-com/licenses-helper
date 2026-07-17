@@ -1,5 +1,7 @@
 # Private Packages Licenses Helper
 
+[![Latest Release](https://img.shields.io/github/v/release/private-packages-com/licenses-helper)](https://github.com/private-packages-com/licenses-helper/releases/latest)
+
 Discover license credentials for installed premium plugins and export them for import into [Private Packages](https://private-packages.com).
 
 ## Installation & Usage
@@ -22,7 +24,7 @@ wp private-packages discover-licenses
 
 **Install via zip:**
 
-1. Download the plugin zip from GitHub.
+1. Download the plugin zip from the [latest release](https://github.com/private-packages-com/licenses-helper/releases/latest/download/licenses-helper.zip).
 2. Go to **Plugins > Add New > Upload Plugin** and upload the zip.
 3. Activate the plugin.
 
