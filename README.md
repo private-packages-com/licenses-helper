@@ -13,7 +13,7 @@ Discover license credentials for installed premium plugins and export them for i
 **Option 2 — WP-CLI**
 
 ```bash
-wp package install private-packages-com/discover-licenses-command
+wp package install private-packages-com/licenses-helper
 ```
 
 ## CLI Usage
