@@ -9,6 +9,8 @@ Discover license credentials for installed premium plugins and export them for i
 - PHP 8.1 or higher
 - WordPress with WP-CLI
 
+Note that plugins don't have to be activated to be discovered by this plugin.
+
 ## Installation & Usage
 
 ### Option 1 — WP-CLI package
@@ -50,6 +52,7 @@ Once activated, you can discover licenses in two ways:
 | `--format=<format>` | Output format: `json` (default) or `table`          |
 | `--plugin=<slug>`   | Only return data for a specific plugin slug         |
 | `--filter=<string>` | Only return plugins whose slug contains this string |
+| `--recipe=<recipe>` | Only return plugins that use this recipe. Available recipes: `acf`, `admin_columns_pro`, `edd`, `facet_w_p`, `gravity_forms`, `themeisle`, `woo_commerce`, `wp_rocket`, `wp_software_license`, `wpml` |
 
 **Examples**
 
@@ -65,6 +68,9 @@ wp private-packages discover-licenses --plugin=advanced-custom-fields-pro
 
 # Filter by partial slug
 wp private-packages discover-licenses --filter=woocommerce
+
+# Filter by recipe
+wp private-packages discover-licenses --recipe=woo_commerce
 ```
 
 The JSON output can be piped or copied directly for import into Private Packages.
@@ -78,7 +84,7 @@ The JSON output can be piped or copied directly for import into Private Packages
 
 ## Understanding the Results
 
-| Status                                                        | Meaning                                                                                                                                                                                                                                                                                                                        |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Status                                                                                                             | Meaning                                                                                                                                                                                                                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **No preset available. You can try to manually add this plugin in Private Packages. Contact us if you need help.** | The plugin is not in the Private Packages list. This either means it is not a premium plugin (in which case it should be installed via [wp-packages.org](https://wp-packages.org)) or it is a premium plugin that Private Packages does not yet have a preset for. You can add it manually, or [contact us](https://private-packages.com) if you need help. |
-| **Supported in Private Packages, but can't be exported**      | The plugin is in the Private Packages list, but no credentials were found. This could mean the license credentials are not stored in the database, or this helper does not yet know where to look for them. Add this plugin to Private Packages manually.                                                                      |
+| **Supported in Private Packages, but can't be exported**                                                           | The plugin is in the Private Packages list, but no credentials were found. This could mean the license credentials are not stored in the database, or this helper does not yet know where to look for them. Add this plugin to Private Packages manually.                                                                                                   |

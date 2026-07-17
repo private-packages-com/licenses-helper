@@ -27,12 +27,16 @@ class DiscoverLicensesCommand
      * [--filter=<string>]
      * : Only return plugins whose slug contains this string (e.g. woocommerce).
      *
+     * [--recipe=<recipe>]
+     * : Only return plugins that use this recipe (e.g. woo_commerce, edd).
+     *
      * ## EXAMPLES
      *
      *     wp private-packages discover-licenses
      *     wp private-packages discover-licenses --format=table
      *     wp private-packages discover-licenses --plugin=advanced-custom-fields-pro
      *     wp private-packages discover-licenses --filter=woocommerce
+     *     wp private-packages discover-licenses --recipe=edd
      *
      * @when after_wp_load
      */
@@ -45,6 +49,7 @@ class DiscoverLicensesCommand
         $format = $assocArgs['format'] ?? 'json';
         $pluginFilter = $assocArgs['plugin'] ?? null;
         $slugFilter = $assocArgs['filter'] ?? null;
+        $recipeFilter = $assocArgs['recipe'] ?? null;
 
         if (! $this->discoverer->hasValidPackages()) {
             \WP_CLI::error('Could not load the packages list from private-packages.com. Please try again later.');
@@ -61,6 +66,13 @@ class DiscoverLicensesCommand
         }
 
         $results = $this->discoverer->discover($installedPlugins);
+
+        if ($recipeFilter !== null) {
+            $results = array_values(
+                array_filter($results, fn ($result) => ($result['export']['recipe'] ?? null) === $recipeFilter)
+            );
+        }
+
         $tableRows = [];
         $jsonRows = [];
 
