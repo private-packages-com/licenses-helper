@@ -5,7 +5,7 @@ namespace PrivatePackages\DiscoverLicensesCommand;
 /**
  * Plugin Name: Private Packages: Licenses Helper
  * Description: A WP-CLI command to discover licenses for installed premium plugins. Easily import them into your Private Packages repository.
- * Version:           1.0.2
+ * Version:           1.1.0
  * Author: Tom Broucke
  * Author URI: https://private-packages.com
  * License: MIT
