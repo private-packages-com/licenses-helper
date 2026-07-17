@@ -35,7 +35,7 @@ class AdminPage
             <h1>Discover Licenses</h1>
             <p>Select the plugins you want to include in the export, then click <strong>Generate Export</strong>.</p>
 
-            <?php if ($export !== null) { ?>
+            <?php if ($export) { ?>
                 <h2>Export</h2>
                 <p>Copy the JSON below, go to <strong>Private Packages &gt; Packages</strong>, click <strong>Import from JSON</strong>, paste the JSON and submit.</p>
                 <textarea

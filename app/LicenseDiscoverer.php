@@ -39,7 +39,7 @@ class LicenseDiscoverer
     }
 
     /**
-     * @param array<int, string> $slugs
+     * @param  array<int, string>  $slugs
      * @return array<int, array<string, mixed>>
      */
     public function discover(array $slugs): array
@@ -57,6 +57,7 @@ class LicenseDiscoverer
                     'has_credentials' => false,
                     'export' => null,
                 ];
+
                 continue;
             }
 
@@ -72,6 +73,7 @@ class LicenseDiscoverer
                     'has_credentials' => false,
                     'export' => null,
                 ];
+
                 continue;
             }
 

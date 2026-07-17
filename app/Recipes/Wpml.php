@@ -35,7 +35,7 @@ class Wpml extends Recipe
     }
 
     /**
-     * @param array<string, mixed> $settings
+     * @param  array<string, mixed>  $settings
      * @return array<string, mixed>
      */
     public function getSettings(array $settings): array

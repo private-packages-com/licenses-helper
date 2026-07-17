@@ -11,7 +11,7 @@ abstract class Recipe
     abstract public function getCredentials(): ?array;
 
     /**
-     * @param array<string, mixed> $settings
+     * @param  array<string, mixed>  $settings
      * @return array<string, mixed>
      */
     public function getSettings(array $settings): array
